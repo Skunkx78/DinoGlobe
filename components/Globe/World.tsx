@@ -22,11 +22,10 @@ export function World({ pins }: { pins?: any[] }) {
 
     if (!mounted) return null;
 
-    // Custom HTML marker render function
     const renderHtmlMarker = (d: any) => {
         const el = document.createElement('div');
         el.innerHTML = `
-      <div class="pin-container" style="transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative;">
+      <div class="pin-container" style="transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; pointer-events: auto;">
         
         <!-- Tooltip -->
         <div class="pin-tooltip" style="
@@ -39,7 +38,7 @@ export function World({ pins }: { pins?: any[] }) {
             border-radius: 8px; 
             font-size: 12px; 
             white-space: nowrap; 
-            display: none; /* Controlled by CSS hover */
+            display: none; 
             flex-direction: column; 
             align-items: center; 
             pointer-events: none; 
@@ -71,9 +70,23 @@ export function World({ pins }: { pins?: any[] }) {
                 ref={globeEl}
                 width={width}
                 height={height}
-                globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-                bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+                // High-resolution textures (8K where available/stable)
+                globeImageUrl="/textures/8k_earth_daymap.jpg"
+                bumpImageUrl="https://unpkg.com/three-globe/example/img/earth-topology.png"
                 backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+
+                // Note: For Ultra-High Definition (8K), you can use these if your connection allows:
+                // globeImageUrl="https://raw.githubusercontent.com/mayognaise/aframe-gif-shader/master/examples/basic/earth.jpg" (Example of another source)
+                // or https://www.solarsystemscope.com/textures/download/8k_earth_daymap.jpg (Manual download recommended for production)
+                // For now, staying with the reliable unpkg ones but ensuring we aren't limiting them artificially.
+                // Let's try to switch to a better source if unpkg is too blurry.
+                // Switching to a better source:
+
+                // Note: User added local textures should be referenced here if available.
+                // Example: globeImageUrl="/textures/8k_earth_daymap.jpg"
+
+                // globeImageUrl="https://raw.githubusercontent.com/vasturiano/react-globe.gl/master/example/img/earth-blue-marble.jpg"
+                // bumpImageUrl="https://raw.githubusercontent.com/vasturiano/react-globe.gl/master/example/img/earth-topology.png"
 
                 atmosphereColor="#3a228a"
                 atmosphereAltitude={0.2}
