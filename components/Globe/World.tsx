@@ -23,6 +23,10 @@ export function World({ pins }: { pins?: any[] }) {
     if (!mounted) return null;
 
     const renderHtmlMarker = (d: any) => {
+        const isAnon = d.is_anonymous;
+        const username = isAnon ? "Anonymous" : d.username;
+        const avatarUrl = isAnon ? "https://cdn.discordapp.com/embed/avatars/0.png" : d.avatar_url;
+
         const el = document.createElement('div');
         el.innerHTML = `
       <div class="pin-container" style="transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; pointer-events: auto;">
@@ -46,7 +50,7 @@ export function World({ pins }: { pins?: any[] }) {
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             z-index: 50;
         ">
-            <span style="font-weight: bold; font-size: 14px; margin-bottom: 2px;">${d.username}</span>
+            <span style="font-weight: bold; font-size: 14px; margin-bottom: 2px;">${username}</span>
             <span style="font-size: 11px; color: #aaa;">${d.location || 'Unknown'}</span>
             
             <!-- Arrow -->
@@ -54,13 +58,13 @@ export function World({ pins }: { pins?: any[] }) {
         </div>
 
         <div class="pin-avatar" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid white; overflow: hidden; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.2s ease;">
-          <img src="${d.avatar_url}" alt="${d.username}" style="width: 100%; height: 100%; object-fit: cover;" />
+          <img src="${avatarUrl}" alt="${username}" style="width: 100%; height: 100%; object-fit: cover;" />
         </div>
         <div style="width: 2px; height: 16px; background: rgba(255,255,255,0.8);"></div>
       </div>
     `;
 
-        el.onclick = () => console.log(`Clicked ${d.username}`);
+        el.onclick = () => console.log(`Clicked ${username}`);
         return el;
     };
 

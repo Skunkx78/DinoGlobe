@@ -8,6 +8,7 @@ create table public.pins (
   lng double precision not null,
   location text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  is_anonymous boolean default false,
   
   -- Prevent multiple pins from the same discord user (unless admin logic handles it, but unique constraint is safe)
   constraint pins_discord_id_key unique (discord_id)
@@ -22,3 +23,6 @@ create policy "Enable read access for all users" on public.pins
 
 -- Policy: Allow Service Role (Server-side) to do EVERYTHING
 -- (Policies are skipped by the service role key by default, but explicit is fine or just relying on service role override)
+
+-- MIGRATION:
+-- ALTER TABLE public.pins ADD COLUMN is_anonymous BOOLEAN DEFAULT FALSE;

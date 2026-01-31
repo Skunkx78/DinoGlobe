@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { supabaseAdmin, supabase } from "@/lib/supabase";
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/pins - Fetch all pins
 export async function GET() {
     const { data: pins, error } = await supabase
@@ -25,7 +27,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { lat, lng, location, regionName } = body;
+    const { lat, lng, location, regionName, isAnonymous } = body;
 
     if (!lat || !lng) {
         return NextResponse.json({ error: "Missing coordinates" }, { status: 400 });
@@ -73,6 +75,7 @@ export async function POST(req: Request) {
             lat: finalLat,
             lng: finalLng,
             location: location || regionName,
+            is_anonymous: isAnonymous || false,
         }, { onConflict: 'discord_id' })
         .select()
         .single();
