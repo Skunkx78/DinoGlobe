@@ -7,6 +7,8 @@ import { Overlay } from "@/components/UI/Overlay";
 export default function GlobeIntegration() {
     const [pins, setPins] = useState<any[]>([]);
     const [refreshKey, setRefreshKey] = useState(0);
+    const [isAutoRotating, setIsAutoRotating] = useState(true);
+    const [resetZoomToken, setResetZoomToken] = useState(0);
 
     const fetchPins = useCallback(async () => {
         try {
@@ -26,8 +28,17 @@ export default function GlobeIntegration() {
 
     return (
         <>
-            <Overlay onAddLocation={() => setRefreshKey(k => k + 1)} />
-            <World pins={pins} />
+            <Overlay
+                onAddLocation={() => setRefreshKey(k => k + 1)}
+                isAutoRotating={isAutoRotating}
+                onToggleRotation={() => setIsAutoRotating(p => !p)}
+                onResetZoom={() => setResetZoomToken(t => t + 1)}
+            />
+            <World
+                pins={pins}
+                isAutoRotating={isAutoRotating}
+                resetZoomToken={resetZoomToken}
+            />
         </>
     );
 }

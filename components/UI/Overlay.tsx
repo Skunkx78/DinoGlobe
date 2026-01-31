@@ -2,9 +2,19 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
-import { Loader2, MapPin, LogOut, Eye, EyeOff, Ghost } from "lucide-react";
+import { Loader2, MapPin, LogOut, Eye, EyeOff, Ghost, RotateCw, Pause, ZoomOut } from "lucide-react";
 
-export function Overlay({ onAddLocation }: { onAddLocation: (location: string) => void }) {
+export function Overlay({
+    onAddLocation,
+    isAutoRotating = true,
+    onToggleRotation,
+    onResetZoom
+}: {
+    onAddLocation: (location: string) => void;
+    isAutoRotating?: boolean;
+    onToggleRotation?: () => void;
+    onResetZoom?: () => void;
+}) {
     const { data: session, status } = useSession();
     const [loading, setLoading] = useState(false);
     const [locationInput, setLocationInput] = useState("");
@@ -80,6 +90,28 @@ export function Overlay({ onAddLocation }: { onAddLocation: (location: string) =
 
     return (
         <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-4 pointer-events-auto">
+            {/* Reset Zoom Button */}
+            {onResetZoom && (
+                <button
+                    onClick={onResetZoom}
+                    className="bg-black/40 backdrop-blur-md border border-white/10 text-white p-2.5 rounded-full hover:bg-white/10 transition-all shadow-lg"
+                    title="Reset Zoom"
+                >
+                    <ZoomOut size={20} />
+                </button>
+            )}
+
+            {/* Toggle Rotation Button */}
+            {onToggleRotation && (
+                <button
+                    onClick={onToggleRotation}
+                    className={`backdrop-blur-md border border-white/10 text-white p-2.5 rounded-full hover:bg-white/10 transition-all shadow-lg ${isAutoRotating ? 'bg-blue-600/80 animate-pulse' : 'bg-black/40'}`}
+                    title={isAutoRotating ? "Pause Rotation" : "Auto Rotate"}
+                >
+                    {isAutoRotating ? <Pause size={20} /> : <RotateCw size={20} />}
+                </button>
+            )}
+
             {/* Toggle Visibility Button */}
             <button
                 onClick={() => setIsVisible(!isVisible)}
